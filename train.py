@@ -2,6 +2,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
 import matplotlib.pyplot as plt
+from pandas.plotting import table
 import seaborn as sns
 import numpy as np
 # Set random seed
@@ -13,6 +14,23 @@ seed = 42
 
 # Load in the data
 df = pd.read_csv("wine_quality.csv")
+
+# Saving Correlationresult as png
+desc = df.describe()
+
+# image formatting
+axis_fs = 18 #fontsize
+title_fs = 22 #fontsize
+sns.set(style="whitegrid")
+
+plt.figure(figsize=(15, 10))
+ax = sns.heatmap(df.corr(), annot=True)
+ax.set_xlabel('Features of the Wine',fontsize = axis_fs)
+ax.set_ylabel('Features of the Wine', fontsize = axis_fs)
+ax.set_title('Correlation matrix', fontsize = title_fs)
+
+plt.savefig("correlation_plot.png",dpi=120)
+
 
 # Split into train and test sections
 y = df.pop("quality")
@@ -46,10 +64,7 @@ labels = df.columns
 feature_df = pd.DataFrame(list(zip(labels, importances)), columns = ["feature","importance"])
 feature_df = feature_df.sort_values(by='importance', ascending=False,)
 
-# image formatting
-axis_fs = 18 #fontsize
-title_fs = 22 #fontsize
-sns.set(style="whitegrid")
+
 
 ax = sns.barplot(x="importance", y="feature", data=feature_df)
 ax.set_xlabel('Importance',fontsize = axis_fs) 
