@@ -67,10 +67,10 @@ axis_fs = 18 #fontsize
 title_fs = 22 #fontsize
 sns.set(style="whitegrid")
 
-ax1 = sns.barplot(x="importance", y="feature", data=feature_df)
-ax1.set_xlabel('Importance',fontsize = axis_fs)
-ax1.set_ylabel('Feature', fontsize = axis_fs)#ylabel
-ax1.set_title('Random forest\nfeature importance', fontsize = title_fs)
+ax = sns.barplot(x="importance", y="feature", data=feature_df)
+ax.set_xlabel('Importance',fontsize = axis_fs)
+ax.set_ylabel('Feature', fontsize = axis_fs)#ylabel
+ax.set_title('Random forest\nfeature importance', fontsize = title_fs)
 
 plt.tight_layout()
 plt.savefig("feature_importance.png",dpi=120) 
@@ -85,6 +85,7 @@ y_pred = regr.predict(X_test) + np.random.normal(0,0.25,len(y_test))
 y_jitter = y_test + np.random.normal(0,0.25,len(y_test))
 res_df = pd.DataFrame(list(zip(y_jitter,y_pred)), columns = ["true","pred"])
 
+plt.figure(figsize=(15, 10))
 ax = sns.scatterplot(x="true", y="pred",data=res_df)
 ax.set_aspect('equal')
 ax.set_xlabel('True wine quality',fontsize = axis_fs) 
@@ -97,5 +98,6 @@ plt.ylim((2.5,8.5))
 plt.xlim((2.5,8.5))
 
 plt.tight_layout()
-plt.savefig("residuals.png",dpi=120) 
+plt.savefig("residuals.png",dpi=120)
+plt.close()
 
