@@ -19,17 +19,15 @@ df = pd.read_csv("wine_quality.csv")
 desc = df.describe()
 
 # image formatting
-axis_fs = 18 #fontsize
-title_fs = 22 #fontsize
-sns.set(style="whitegrid")
 
 plt.figure(figsize=(15, 10))
-ax = sns.heatmap(df.corr(), annot=True)
-ax.set_xlabel('Features of the Wine',fontsize = axis_fs)
-ax.set_ylabel('Features of the Wine', fontsize = axis_fs)
-ax.set_title('Correlation matrix', fontsize = title_fs)
 
-plt.savefig("correlation_plot.png",dpi=120)
+ax = sns.heatmap(df.corr(), annot=True)
+ax.set_xlabel('Features of the Wine')
+ax.set_ylabel('Features of the Wine')
+ax.set_title('Correlation matrix')
+plt.tight_layout()
+plt.savefig("correlation_plot.png")
 
 
 # Split into train and test sections
@@ -64,12 +62,15 @@ labels = df.columns
 feature_df = pd.DataFrame(list(zip(labels, importances)), columns = ["feature","importance"])
 feature_df = feature_df.sort_values(by='importance', ascending=False,)
 
+plt.figure(figsize=(15, 10))
+axis_fs = 18 #fontsize
+title_fs = 22 #fontsize
+sns.set(style="whitegrid")
 
-
-ax = sns.barplot(x="importance", y="feature", data=feature_df)
-ax.set_xlabel('Importance',fontsize = axis_fs) 
-ax.set_ylabel('Feature', fontsize = axis_fs)#ylabel
-ax.set_title('Random forest\nfeature importance', fontsize = title_fs)
+ax1 = sns.barplot(x="importance", y="feature", data=feature_df)
+ax1.set_xlabel('Importance',fontsize = axis_fs)
+ax1.set_ylabel('Feature', fontsize = axis_fs)#ylabel
+ax1.set_title('Random forest\nfeature importance', fontsize = title_fs)
 
 plt.tight_layout()
 plt.savefig("feature_importance.png",dpi=120) 
