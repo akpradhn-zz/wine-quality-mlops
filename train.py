@@ -2,6 +2,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
 import matplotlib.pyplot as plt
+from pandas.plotting import table
 import seaborn as sns
 import numpy as np
 # Set random seed
@@ -14,6 +15,21 @@ seed = 42
 # Load in the data
 df = pd.read_csv("wine_quality.csv")
 
+# Saving Correlationresult as png
+desc = df.describe()
+
+# image formatting
+
+plt.figure(figsize=(15, 10))
+
+ax = sns.heatmap(df.corr(), annot=True)
+ax.set_xlabel('Features of the Wine')
+ax.set_ylabel('Features of the Wine')
+ax.set_title('Correlation matrix')
+plt.tight_layout()
+plt.savefig("correlation_plot.png")
+
+
 # Split into train and test sections
 y = df.pop("quality")
 X_train, X_test, y_train, y_test = train_test_split(df, y, test_size=0.2, random_state=seed)
@@ -23,7 +39,7 @@ X_train, X_test, y_train, y_test = train_test_split(df, y, test_size=0.2, random
 #################################
 
 # Fit a model on the train section
-regr = RandomForestRegressor(max_depth=2, random_state=seed)
+regr = RandomForestRegressor(max_depth=20, random_state=seed)
 regr.fit(X_train, y_train)
 
 # Report training set score
@@ -46,13 +62,13 @@ labels = df.columns
 feature_df = pd.DataFrame(list(zip(labels, importances)), columns = ["feature","importance"])
 feature_df = feature_df.sort_values(by='importance', ascending=False,)
 
-# image formatting
+plt.figure(figsize=(15, 10))
 axis_fs = 18 #fontsize
 title_fs = 22 #fontsize
 sns.set(style="whitegrid")
 
 ax = sns.barplot(x="importance", y="feature", data=feature_df)
-ax.set_xlabel('Importance',fontsize = axis_fs) 
+ax.set_xlabel('Importance',fontsize = axis_fs)
 ax.set_ylabel('Feature', fontsize = axis_fs)#ylabel
 ax.set_title('Random forest\nfeature importance', fontsize = title_fs)
 
@@ -69,6 +85,7 @@ y_pred = regr.predict(X_test) + np.random.normal(0,0.25,len(y_test))
 y_jitter = y_test + np.random.normal(0,0.25,len(y_test))
 res_df = pd.DataFrame(list(zip(y_jitter,y_pred)), columns = ["true","pred"])
 
+plt.figure(figsize=(15, 10))
 ax = sns.scatterplot(x="true", y="pred",data=res_df)
 ax.set_aspect('equal')
 ax.set_xlabel('True wine quality',fontsize = axis_fs) 
@@ -81,5 +98,6 @@ plt.ylim((2.5,8.5))
 plt.xlim((2.5,8.5))
 
 plt.tight_layout()
-plt.savefig("residuals.png",dpi=120) 
+plt.savefig("residuals.png",dpi=120)
+plt.close()
 
